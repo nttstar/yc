@@ -1,0 +1,59 @@
+
+<div class="container">
+  <div class="row">
+    <div class="col-lg-12">欢迎来到伊比价, 做专业的实时比价网站, 请在搜索框内输入3C商品或者化妆品体验. 例如"iphone 6 plus"</div>
+    <div class="col-lg-3"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></div>
+  </div>
+  <div class="row">
+    <div class="col-sm-5 col-md-5 pull-right">
+      <%= form_tag({controller: "product", action: "search"}, method: "get", class: "navbar-form") do %>
+          <div class="input-group input-group-lg">
+            <% holder = @query.nil? ? 'iPhone6 plus 64G' : @query %>
+            <%= text_field_tag(:q, nil, class:"form-control", placeholder: holder) %>
+            <div class="input-group-btn">
+              <%= button_tag(:type => 'submit', :class => 'btn btn-primary') do %>
+                  <i class="glyphicon glyphicon-search"></i>
+              <% end %>
+              <!--<%= submit_tag(nil, { :class=>'glyphicon glyphicon-search', "aria-hidden"=>'true'}) %>-->
+              <!--<span class="glyphicon glyphicon-search" aria-hidden="true"></span>-->
+              <!--<%= button_tag(nil, {:class=>'glyphicon glyphicon-search', "aria-hidden"=> true}) %>-->
+            </div>
+          </div>
+      <% end %>
+    </div>
+  </div>
+  <% if !@pgroups.nil? and !@pgroups.empty? %>
+
+      <% @pgroups.each do |pg| %>
+
+          <div class="row">
+            <% #next if pg.spu.nil? %>
+            <% unless pg.spu.nil? %>
+                <% spu = pg.spu %>
+                <div class="col-sm-3 col-lg-3 col-md-3 slot">
+                  <div class="info-panel">
+                    <h4><%= spu["Title"] %></h4>
+                  </div>
+                  <span class="price"><%= "#{pg.price_range[0]}-#{pg.price_range[1]}" %></span>
+                </div>
+            <% end %>
+            <% pg.products.each do |p| %>
+                <div class="col-sm-3 col-lg-3 col-md-3 slot">
+                  <div class="pic-panel">
+                    <a href="<%= p[:Url] %>" title="<%= p[:Title] %>"><img src="<%= p[:Picture] %>" alt="" /></a>
+                  </div>
+                  <div class="info-panel">
+                    <a href="<%= p[:Url] %>" title="<%= p[:Title] %>"><%= truncate(p[:Title], length: 30) %></a>
+                  </div>
+                  <p><%= p[:source_name] %></p>
+                  <span class="price"><%= p[:Price].is_a?(String) ? '-' : p[:Price] %></span>
+
+
+                </div>
+            <% end %>
+            </div>
+      <% end %>
+  <% end %>
+  </div>
+
+
